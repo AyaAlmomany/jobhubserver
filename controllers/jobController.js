@@ -12,6 +12,7 @@ module.exports={
             res.status(500).json(error);
         }
     }  ,
+    
     updateJob: async(req,res)=>{
         const jobId=req.params.id;
         const updated=req.body;
