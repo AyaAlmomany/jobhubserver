@@ -1,4 +1,4 @@
-const Job =require("../models/job");
+const Job =require("../models/Job");
 
 module.exports={
     createJob:async(req,res)=>{
@@ -75,7 +75,7 @@ module.exports={
                         text: {
                           query: req.params.key,
                           path: {
-                            wildcard: "*" //to search for everthing
+                            wildcard: "*" //to search for everything
                           }
                         }
                       }
@@ -86,6 +86,17 @@ module.exports={
         }
         catch(error){
             res.status(500).json(error);
+        }
+    },
+    getAgentJobs :async(req,res)=>{
+        const uid=req.params.uid;
+        
+        try{
+            const agentJobs=await Job.find({agentID:uid},{__v:0,createdAt:0,updatedAt:0,}).sort({createdAt:-1});
+            res.status(200).json(agentJobs);
+        }
+        catch(error){
+            res.status(500).json(error.message);
         }
     },
 };

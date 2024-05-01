@@ -13,5 +13,8 @@ router.put('/:id',jobController.updateJob);
 
 router.delete('/:id',jobController.deletJob);
 
+router.get('/agent/:uid',jobController.getAgentJobs);
+
+
 
 module.exports=router;
