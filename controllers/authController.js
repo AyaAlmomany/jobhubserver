@@ -19,6 +19,7 @@ module.exports={
         catch(error){
             if(error.code ==='auth/user-not-found'){
                 try{
+                    //firebase user
                     const userResponse =await admin.auth().createUser({
                         email:user.email,
                         password:user.password,
@@ -31,8 +32,8 @@ module.exports={
                     const newUser= await new User({
                         uid:userResponse.uid,
                         username:user.username,
-                        email: user.email,
-                        password: CryptoJS.AES.encrypt(req.user.password,process.env.SECRET).toString(),
+                        email: user.email,    //req.user.password
+                        password: CryptoJS.AES.encrypt(user.password,process.env.SECRET).toString(),
                     })
                     console.log(userResponse.uid);
                     console.log(newUser.password);
@@ -69,8 +70,8 @@ module.exports={
                 });
             }
     
-            const decryptedPassword = CryptoJS.AES.decrypt(req.user.password, process.env.SECRET); //
-            console.log(decryptedPassword);
+            const decryptedPassword = CryptoJS.AES.decrypt(user.password, process.env.SECRET); //  
+            //console.log(decryptedPassword);
             const plainPassword = decryptedPassword.toString(CryptoJS.enc.Utf8);
             console.log(plainPassword);
             if (plainPassword !== req.body.password) {

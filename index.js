@@ -12,10 +12,16 @@ const cors =require('cors');
  app.use(cors());
 dotenv.config();
 
-const admin =require('firebase-admin');
-const ServiceAccount=require('./ServicesAccountKey.json');
+ const admin =require('firebase-admin');
+// const ServiceAccount=require('./ServicesAccountKey.json');
+//credential: admin.credential.cert(ServiceAccount),
+
 admin.initializeApp({
-  credential: admin.credential.cert(ServiceAccount),
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+})
 });
  mongoose.connect(process.env.MONGO_URL)
    .then(()=> console.log('connect to jobhub'))
@@ -23,7 +29,7 @@ admin.initializeApp({
 
    app.use(bodyParser.json())
    app.use(bodyParser.urlencoded({extended: true}))
-
+  
     app.use('/api/jobs',jobRouter);
     app.use('/api/user',userRoute);
     app.use('/api/',authRouter);
